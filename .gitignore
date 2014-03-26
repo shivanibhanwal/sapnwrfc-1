@@ -1,7 +1,11 @@
 .config
-*.o
-InstalledFiles
-Makefile
 ext/nwsaprfc/mkmf.log
 ext/nwsaprfc/nwsaprfc.bundle
+*.i
+*.ii
+InstalledFiles
+*.li
+Makefile
+*.o
+*.so
 
