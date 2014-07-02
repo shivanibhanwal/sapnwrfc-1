@@ -146,6 +146,30 @@ module SAPNW
         end
       end
 
+      def deep_strip(object)
+        return(object) unless [Array, Hash, String].include?(object.class)
+
+        if object.is_a?(String)
+          object = object.strip if object.frozen?
+          object.strip!
+          return object
+        end
+
+        if object.is_a?(Hash)
+          keys = object.keys.clone
+
+          keys.each do |k|
+            new_key = deep_strip(k)
+            value = object.delete k
+            object[new_key] = value
+          end
+        end
+
+        if object.is_a?(Enumerable)
+          object.each { |i| deep_strip i }
+        end
+      end
+
       # value setting for parameters - does basic Type checking to preserve
       # sanity for the underlying C extension
       def value=(val=nil)
@@ -198,8 +222,8 @@ module SAPNW
           else # anything - barf
             raise "unknown SAP data type (#{@name}/#{@type})\n"
         end
-        @value = val
-        return val
+        @value = deep_strip val
+        # return val
       end
 
     end
